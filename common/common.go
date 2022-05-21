@@ -32,9 +32,17 @@ type User struct {
 	// 可以支持约40亿(4294967295)用户
 	Id            uint32 `json:"id,omitempty"`
 	Name          string `json:"name,omitempty"`
-	FollowCount   uint32 `json:"follow_count"`
-	FollowerCount uint32 `json:"follower_count"`
-	// IsFollow      bool   `json:"is_follow"`
+	FollowCount   uint32 `json:"follow_count,omitempty"`
+	FollowerCount uint32 `json:"follower_count,omitempty"`
+	IsFollow      bool   `json:"is_follow,omitempty"`
+}
+
+// Relationship 对应一个关注/粉丝关系
+type Relationship struct {
+	Id         uint64 `json:"id,omitempty"`
+	FromUserId uint32 `json:"from_user_id,omitempty"`
+	ToUserId   uint32 `json:"to_user_id,omitempty"`
+	Status     uint8  `json:"status,omitempty"`
 }
 
 type UserAuth struct {
@@ -56,4 +64,4 @@ type UserClaims struct {
 // LoginInfoMap 验证用户登录状态的map
 // key: 用户的userId
 // value: 对应用户的claims(包含userId, userName, expiredTime等)
-var LoginInfoMap = make(map[uint32]UserClaims, 20)
+// var LoginInfoMap = make(map[uint32]UserClaims, 20)

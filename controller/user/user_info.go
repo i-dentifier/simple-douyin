@@ -9,28 +9,28 @@ import (
 )
 
 func UserInfo(c *gin.Context) {
-	var userId uint32
-	uid, err := strconv.ParseUint(c.Query("user_id"), 10, 32)
-	userId = uint32(uid)
+	userId, err := strconv.ParseUint(c.Query("user_id"), 10, 32)
 	// 非法userId引起的error
 	if err != nil {
 		c.JSON(http.StatusOK, common.Response{
-			StatusCode: -1, StatusMsg: "invalid user_id",
+			StatusCode: -1, StatusMsg: "invalid user id",
 		})
 		return
 	}
-	// token经middleware验证合法后将存入common.LoginInfoMap
-	// 如果没有在common.LoginInfoMap中查到用户说明未登录
-	if _, exist := common.LoginInfoMap[userId]; !exist {
+	// token经middleware验证合法后将存入context
+	claims, exist := c.Get("user")
+	// 如果没有在context中查到用户说明未登录
+	if !exist {
 		c.JSON(http.StatusOK, UserResponse{
 			Response: common.Response{
 				StatusCode: -1,
-				StatusMsg:  "please login first",
+				StatusMsg:  "login required",
 			},
 		})
 		return
 	}
-	user, err := userservice.QueryUserInfoById(userId)
+	userClaims := claims.(*common.UserClaims)
+	user, err := userservice.QueryUserInfoById(uint32(userId), userClaims.UserId)
 	if err != nil {
 		c.JSON(http.StatusOK, UserResponse{
 			Response: common.Response{

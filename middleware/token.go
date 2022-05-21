@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go/v4"
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"simple-douyin/common"
 	"time"
 )
@@ -17,7 +18,7 @@ var (
 	// token有效时间(nanosecond)
 	effectTime = 1 * time.Hour
 	// 不需要校验token的路由
-	noVerifyToken = []string{"/login", "/register", "/feed"}
+	noVerifyToken = []string{"/douyin/user/login/", "/douyin/user/register/", "/douyin/feed/"}
 )
 
 // GenerateToken 生成token
@@ -40,7 +41,7 @@ func GenerateToken(userId uint32) (string, error) {
 	}
 	// 将签发的(userId, claims)键值对
 	// 存储在controller.LoginInfoMap中
-	common.LoginInfoMap[userId] = claims
+	// common.LoginInfoMap[userId] = claims
 	return tokenStr, nil
 }
 
@@ -55,8 +56,9 @@ func VerifyToken(c *gin.Context) {
 		token = c.PostForm("token")
 	}
 	// noVerifyToken中的请求不需要校验token
+	req := c.Request.RequestURI
 	for _, str := range noVerifyToken {
-		if token == str {
+		if req == str {
 			return
 		}
 	}
@@ -65,19 +67,28 @@ func VerifyToken(c *gin.Context) {
 	claims, err := parseToken(token)
 	// token非法
 	if err != nil {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, common.Response{
+			StatusCode: -1,
+			StatusMsg:  err.Error(),
+		})
 		return
 	}
 
 	// 校验token过期时间
 	if !(claims.ExpiresAt.Time.Unix() > time.Now().Unix()) {
 		// 过期删除token
-		delete(common.LoginInfoMap, claims.UserId)
+		// delete(common.LoginInfoMap, claims.UserId)
+		c.AbortWithStatusJSON(http.StatusUnauthorized, common.Response{
+			StatusCode: -1,
+			StatusMsg:  "login required",
+		})
 		return
 	}
+
 	// 刷新token时间
-	refreshExp(claims)
-	// 将用户信息放入map
-	common.LoginInfoMap[claims.UserId] = *claims
+	refreshToken(claims)
+	// 放入上下文方便controller读取
+	c.Set("user", claims)
 }
 
 // parseToken 验证token合法性
@@ -96,8 +107,8 @@ func parseToken(tokenStr string) (*common.UserClaims, error) {
 	return claims, err
 }
 
-// refreshExp 更新token的过期时间
-func refreshExp(claims *common.UserClaims) {
+// refreshToken 更新token的过期时间
+func refreshToken(claims *common.UserClaims) {
 	// 下次过期时间设置为当前时间往后推2h
 	claims.ExpiresAt = jwt.At(time.Now().Add(2 * time.Hour))
 }

@@ -1,4 +1,14 @@
-/* 用户数据表users */
+-- 创建数据库
+CREATE DATABASE `simple_douyin`;
+
+-- 使用数据库
+USE `simple_douyin`;
+
+/* 
+    下面开始建表 
+*/
+
+-- 用户数据表users
 CREATE TABLE `users` (
     -- 自增主键: uint支持近43亿个用户
     `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -13,18 +23,18 @@ CREATE TABLE `users` (
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-/* 用户认证表user_auths */
+-- 用户认证表user_auths
 CREATE TABLE `user_auths` (
     -- 自增主键
     `id` int unsigned NOT NULL AUTO_INCREMENT,
     -- 登录用户名 外码 users(`name`)
     `name` varchar(10) NOT NULL COMMENT 'foreign users(`name`)',
-    -- 登录密码
-    `password` varchar(16) NOT NULL,
+    -- 登录密码 加密存储需要60个字符
+    `password` varchar(60) NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-/*  关注｜粉丝关系表relationships */
+-- 关注｜粉丝关系表relationships
 CREATE TABLE `relationships` (
     -- 自增主键
     `id` bigint unsigned NOT NULL AUTO_INCREMENT,

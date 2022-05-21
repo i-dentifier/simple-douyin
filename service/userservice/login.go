@@ -2,6 +2,7 @@ package userservice
 
 import (
 	"errors"
+	"golang.org/x/crypto/bcrypt"
 	"simple-douyin/dao/userdao"
 )
 
@@ -47,5 +48,6 @@ func (f *LoginFlow) checkUserName() (uint32, error) {
 }
 
 func (f *LoginFlow) authentication() bool {
-	return f.logPassword == f.authDao.GetPassword()
+	err := bcrypt.CompareHashAndPassword([]byte(f.authDao.GetPassword()), []byte(f.logPassword))
+	return err == nil
 }

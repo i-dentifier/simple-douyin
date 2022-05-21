@@ -47,6 +47,7 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
+
 	c.JSON(http.StatusOK, UserLoginResponse{
 		Response: common.Response{StatusCode: 0, StatusMsg: "success"},
 		UserId:   userId,

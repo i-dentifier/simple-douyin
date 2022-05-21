@@ -2,11 +2,18 @@ package userservice
 
 import (
 	"errors"
+	"golang.org/x/crypto/bcrypt"
 	"simple-douyin/dao/userdao"
 )
 
 func Register(username string, password string) error {
-	return NewRegisterFlow(username, password).DoRegister()
+	// 密码加密
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	encryptPwd := string(hash)
+	return NewRegisterFlow(username, encryptPwd).DoRegister()
 }
 
 type RegisterFlow struct {
