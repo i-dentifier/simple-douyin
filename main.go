@@ -9,7 +9,6 @@ import (
 func main() {
 	config.DBInit()
 	r := gin.Default()
-	// 除个别请求外均需先验证token
 	router.InitRouter(r)
-	r.Run(":8080") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	r.Run(":8080")
 }

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	userdao "simple-douyin/dao/user"
+	"simple-douyin/model"
 )
 
 // LoginFlow 控制登录流程
@@ -12,7 +13,8 @@ type LoginFlow struct {
 	authDao     *userdao.AuthDao
 	logUsername string
 	logPassword string
-	userId      uint32
+	// userId      uint32
+	userAuth *model.UserAuth
 }
 
 // Login controller通过调用Login
@@ -30,29 +32,27 @@ func NewLoginFlow(logUsername string, logPassword string) *LoginFlow {
 }
 
 func (f *LoginFlow) DoLogin() (uint32, error) {
-	userId, err := f.checkUserName()
+	err := f.checkUserName()
 	// 如果用户不存在返回error
 	if err != nil {
 		return 0, errors.New(fmt.Sprintf("user:%s doesn't exit", f.logUsername))
 	}
+	fmt.Printf("%#v\n", f.userAuth)
 	// 如果身份验证失败返回error
 	if err := f.authentication(); err != nil {
-		return 0, err
+		return 0, errors.New("incorrect user name or password")
 	}
 	// 将userId和err返回给controller
-	return userId, nil
+	return f.userAuth.Id, nil
 }
 
-func (f *LoginFlow) checkUserName() (uint32, error) {
-	userId, err := f.authDao.FindUser(f.logUsername)
-	return userId, err
+func (f *LoginFlow) checkUserName() error {
+	var err error
+	f.userAuth, err = f.authDao.FindUser(f.logUsername)
+	return err
 }
 
 func (f *LoginFlow) authentication() error {
-	password, err := f.authDao.GetPassword(f.logUsername)
-	if err != nil {
-		return err
-	}
-	err = bcrypt.CompareHashAndPassword([]byte(password), []byte(f.logPassword))
+	err := bcrypt.CompareHashAndPassword([]byte(f.userAuth.Password), []byte(f.logPassword))
 	return err
 }

@@ -20,10 +20,10 @@ func Register(c *gin.Context) {
 		})
 		return
 	}
-	//// 注册成功后自动登录
-	//// 这里用户名和密码一定是正确的
-	//// 所以忽略error
-	//userId, _ := userservice.Login(username, password)
+	// 注册成功后自动登录
+	// 这里用户名和密码一定是正确的
+	// 所以忽略error
+	// userId, _ := userservice.Login(username, password)
 
 	// 生成token
 	token, errToken := middleware.GenerateToken(userId)

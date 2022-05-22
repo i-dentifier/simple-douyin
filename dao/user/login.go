@@ -21,14 +21,14 @@ func NewAuthDaoInstance() *AuthDao {
 	return authDao
 }
 
-func (f *AuthDao) FindUser(username string) (uint32, error) {
+func (f *AuthDao) FindUser(username string) (*model.UserAuth, error) {
 	var ua model.UserAuth
-	res := config.DB.Select("id").Where("name = ?", username).First(&ua)
-	return ua.Id, res.Error
+	res := config.DB.Where("name = ?", username).First(&ua)
+	return &ua, res.Error
 }
 
-func (f *AuthDao) GetPassword(username string) (string, error) {
-	var ua model.UserAuth
-	res := config.DB.Select("password").Where("name = ?", username).First(&ua)
-	return ua.Password, res.Error
-}
+// func (f *AuthDao) GetPassword(username string) (string, error) {
+// 	var ua model.UserAuth
+// 	res := config.DB.Select("password").Where("name = ?", username).First(&ua)
+// 	return ua.Password, res.Error
+// }

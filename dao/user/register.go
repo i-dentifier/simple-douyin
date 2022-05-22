@@ -28,7 +28,7 @@ func (f *RegisterDao) IsUserExisted(username string) error {
 }
 
 func (f *RegisterDao) CreateUser(userName string, password string) (uint32, error) {
-	//开启事务
+	// 开启事务
 	tx := config.DB.Begin()
 
 	// 写入users表
@@ -49,7 +49,7 @@ func (f *RegisterDao) CreateUser(userName string, password string) (uint32, erro
 		tx.Rollback()
 		return ua.Id, res.Error
 	}
-	//提交事务
+	// 提交事务
 	tx.Commit()
 	return u.Id, nil
 }
