@@ -3,9 +3,9 @@ package usercontroller
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"simple-douyin/common"
 	"simple-douyin/middleware"
-	"simple-douyin/service/userservice"
+	"simple-douyin/model"
+	userservice "simple-douyin/service/user"
 )
 
 // usersLoginInfo use map to store user info, and key is username+password for demo
@@ -22,19 +22,20 @@ import (
 // }
 
 type UserLoginResponse struct {
-	common.Response
+	model.Response
 	UserId uint32 `json:"user_id"`
 	Token  string `json:"token"`
 }
 
 func Login(c *gin.Context) {
+
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 	userId, errLogin := userservice.Login(username, password)
 	if errLogin != nil {
 		// 登录失败
 		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: common.Response{StatusCode: -1, StatusMsg: errLogin.Error()},
+			Response: model.Response{StatusCode: -1, StatusMsg: errLogin.Error()},
 		})
 		return
 	}
@@ -43,13 +44,13 @@ func Login(c *gin.Context) {
 	if errToken != nil {
 		// token生成失败
 		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: common.Response{StatusCode: -1, StatusMsg: errToken.Error()},
+			Response: model.Response{StatusCode: -1, StatusMsg: errToken.Error()},
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, UserLoginResponse{
-		Response: common.Response{StatusCode: 0, StatusMsg: "success"},
+		Response: model.Response{StatusCode: 0, StatusMsg: "success"},
 		UserId:   userId,
 		Token:    token,
 	})

@@ -2,15 +2,16 @@ package userservice
 
 import (
 	"errors"
+	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"simple-douyin/dao/userdao"
 )
 
-func Register(username string, password string) error {
+func Register(username string, password string) (uint32, error) {
 	// 密码加密
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	encryptPwd := string(hash)
 	return NewRegisterFlow(username, encryptPwd).DoRegister()
@@ -32,15 +33,13 @@ func NewRegisterFlow(username string, password string) *RegisterFlow {
 	}
 }
 
-func (f *RegisterFlow) DoRegister() error {
+func (f *RegisterFlow) DoRegister() (uint32, error) {
 	// 用户名不存在则可以注册
-	if f.checkUserName() {
-		if err := f.registerUser(); err != nil {
-			return err
-		}
-		return nil
+	if ok := f.checkUserName(); !ok {
+		return 0, errors.New(fmt.Sprintf("user:%s has been registerd", f.username))
 	}
-	return errors.New("user already exists")
+
+	return f.registerUser()
 }
 
 func (f *RegisterFlow) checkUserName() bool {
@@ -51,6 +50,6 @@ func (f *RegisterFlow) checkUserName() bool {
 	return false
 }
 
-func (f *RegisterFlow) registerUser() error {
+func (f *RegisterFlow) registerUser() (uint32, error) {
 	return f.registerDao.CreateUser(f.username, f.password)
 }

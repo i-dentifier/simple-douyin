@@ -1,16 +1,25 @@
 package userdao
 
 import (
-	"simple-douyin/common"
 	"simple-douyin/config"
+	"simple-douyin/model"
+	"sync"
+)
+
+var (
+	authOnce sync.Once
+	authDao  *AuthDao
 )
 
 type AuthDao struct {
-	ua common.UserAuth
+	ua model.UserAuth
 }
 
 func NewAuthDaoInstance() *AuthDao {
-	return &AuthDao{}
+	authOnce.Do(func() {
+		authDao = &AuthDao{}
+	})
+	return authDao
 }
 
 func (f *AuthDao) FindUser(username string) (uint32, error) {

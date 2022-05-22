@@ -2,6 +2,7 @@ package userservice
 
 import (
 	"errors"
+	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"simple-douyin/dao/userdao"
 )
@@ -32,7 +33,7 @@ func (f *LoginFlow) DoLogin() (uint32, error) {
 	userId, err := f.checkUserName()
 	// 如果用户不存在返回error
 	if err != nil {
-		return 0, errors.New("user doesn't exit")
+		return 0, errors.New(fmt.Sprintf("user:%s doesn't exit", f.logUsername))
 	}
 	// 如果身份验证失败返回error
 	if !f.authentication() {

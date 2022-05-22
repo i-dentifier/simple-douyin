@@ -1,14 +1,14 @@
 package userservice
 
 import (
-	"simple-douyin/common"
 	"simple-douyin/dao/userdao"
+	"simple-douyin/model"
 )
 
 // QueryUserInfoById 供controller层调用查询用户信息
 // userId 将要查询的用户
 // tokenUserId 当前发起操作的用户
-func QueryUserInfoById(toUserId uint32, fromUserId uint32) (*common.User, error) {
+func QueryUserInfoById(toUserId uint32, fromUserId uint32) (*model.User, error) {
 	return NewQueryUserInfoFlow(toUserId, fromUserId).Do()
 }
 
@@ -26,7 +26,7 @@ func NewQueryUserInfoFlow(userId uint32, tokenUserId uint32) *QueryUserInfoFlow 
 	}
 }
 
-func (f *QueryUserInfoFlow) Do() (*common.User, error) {
+func (f *QueryUserInfoFlow) Do() (*model.User, error) {
 	user, err := f.queryUserBasicInfo()
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func (f *QueryUserInfoFlow) Do() (*common.User, error) {
 	return user, nil
 }
 
-func (f *QueryUserInfoFlow) queryUserBasicInfo() (*common.User, error) {
+func (f *QueryUserInfoFlow) queryUserBasicInfo() (*model.User, error) {
 	return f.userInfoDao.GetUserBasicInfo(f.toUserId)
 }
 
