@@ -12,7 +12,6 @@ var (
 )
 
 type AuthDao struct {
-	ua model.UserAuth
 }
 
 func NewAuthDaoInstance() *AuthDao {
@@ -23,10 +22,13 @@ func NewAuthDaoInstance() *AuthDao {
 }
 
 func (f *AuthDao) FindUser(username string) (uint32, error) {
-	res := config.DB.Where("name = ?", username).First(&f.ua)
-	return f.ua.Id, res.Error
+	var ua model.UserAuth
+	res := config.DB.Select("id").Where("name = ?", username).First(&ua)
+	return ua.Id, res.Error
 }
 
-func (f *AuthDao) GetPassword() string {
-	return f.ua.Password
+func (f *AuthDao) GetPassword(username string) (string, error) {
+	var ua model.UserAuth
+	res := config.DB.Select("password").Where("name = ?", username).First(&ua)
+	return ua.Password, res.Error
 }

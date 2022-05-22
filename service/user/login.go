@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
-	"simple-douyin/dao/userdao"
+	userdao "simple-douyin/dao/user"
 )
 
 // LoginFlow 控制登录流程
@@ -36,8 +36,8 @@ func (f *LoginFlow) DoLogin() (uint32, error) {
 		return 0, errors.New(fmt.Sprintf("user:%s doesn't exit", f.logUsername))
 	}
 	// 如果身份验证失败返回error
-	if !f.authentication() {
-		return 0, errors.New("incorrect password")
+	if err := f.authentication(); err != nil {
+		return 0, err
 	}
 	// 将userId和err返回给controller
 	return userId, nil
@@ -48,7 +48,11 @@ func (f *LoginFlow) checkUserName() (uint32, error) {
 	return userId, err
 }
 
-func (f *LoginFlow) authentication() bool {
-	err := bcrypt.CompareHashAndPassword([]byte(f.authDao.GetPassword()), []byte(f.logPassword))
-	return err == nil
+func (f *LoginFlow) authentication() error {
+	password, err := f.authDao.GetPassword(f.logUsername)
+	if err != nil {
+		return err
+	}
+	err = bcrypt.CompareHashAndPassword([]byte(password), []byte(f.logPassword))
+	return err
 }

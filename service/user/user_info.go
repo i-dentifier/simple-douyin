@@ -1,7 +1,7 @@
 package userservice
 
 import (
-	"simple-douyin/dao/userdao"
+	userdao "simple-douyin/dao/user"
 	"simple-douyin/model"
 )
 
