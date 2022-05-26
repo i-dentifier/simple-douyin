@@ -23,10 +23,13 @@ type Mysql struct {
 func DBInit() error {
 	var err error
 	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=%s&loc=%s&timeout=%s",
+		// 数据库用户名
 		"root",
-		"abc123",
+		// 数据库密码
+		"root",
 		"localhost:3306",
-		"douyin",
+		// 库名
+		"simple_douyin",
 		"utf8mb4",
 		"True",
 		"Local",

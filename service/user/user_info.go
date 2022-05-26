@@ -9,7 +9,7 @@ import (
 // userId 将要查询的用户
 // tokenUserId 当前发起操作的用户
 func QueryUserInfoById(toUserId uint32, fromUserId uint32) (*model.User, error) {
-	return NewQueryUserInfoFlow(toUserId, fromUserId).Do()
+	return NewQueryUserInfoFlow(toUserId, fromUserId).DoQueryUserInfo()
 }
 
 type QueryUserInfoFlow struct {
@@ -26,7 +26,7 @@ func NewQueryUserInfoFlow(userId uint32, tokenUserId uint32) *QueryUserInfoFlow 
 	}
 }
 
-func (f *QueryUserInfoFlow) Do() (*model.User, error) {
+func (f *QueryUserInfoFlow) DoQueryUserInfo() (*model.User, error) {
 	user, err := f.queryUserBasicInfo()
 	if err != nil {
 		return nil, err
