@@ -26,7 +26,7 @@ func DBInit() error {
 		// 数据库用户名
 		"root",
 		// 数据库密码
-		"root",
+		"123456",
 		"localhost:3306",
 		// 库名
 		"simple_douyin",

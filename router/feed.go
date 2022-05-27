@@ -2,13 +2,13 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	feedcontroller "simple-douyin/controller/feed"
 )
 
 func FeedRouterInit(r *gin.RouterGroup) {
 	// basic apis
 	feedRouter := r.Group("/feed")
 	{
-		//r.GET("/", controller.Feed)
-		feedRouter.GET("/", nil)
+		feedRouter.GET("/", feedcontroller.Feed)
 	}
 }

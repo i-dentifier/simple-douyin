@@ -43,7 +43,7 @@ func GenerateToken(userId uint32) (string, error) {
 	}
 	// 将签发的(userId, claims)键值对
 	// 存储在controller.LoginInfoMap中
-	// common.LoginInfoMap[userId] = claims
+	//common.LoginInfoMap[userId] = claims
 	return tokenStr, nil
 }
 
