@@ -11,9 +11,8 @@ import (
 
 func Validate() gin.HandlerFunc {
 	return func(c *gin.Context) {
-
-		username := c.PostForm("username")
-		password := c.PostForm("password")
+		username := c.Query("username")
+		password := c.Query("password")
 		if ok := validateName(username); !ok {
 			c.AbortWithStatusJSON(http.StatusOK, model.Response{
 				StatusCode: -1,
