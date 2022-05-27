@@ -10,8 +10,8 @@ import (
 
 func Register(c *gin.Context) {
 
-	username := c.PostForm("username")
-	password := c.PostForm("password")
+	username := c.Query("username")
+	password := c.Query("password")
 	userId, err := userservice.Register(username, password)
 	if err != nil {
 		// 注册失败
