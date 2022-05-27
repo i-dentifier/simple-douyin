@@ -10,8 +10,8 @@ import (
 
 func Register(c *gin.Context) {
 
-	username := c.PostForm("username")
-	password := c.PostForm("password")
+	username := c.Query("username")
+	password := c.Query("password")
 	userId, err := userservice.Register(username, password)
 	if err != nil {
 		// 注册失败
@@ -31,6 +31,15 @@ func Register(c *gin.Context) {
 		// token生成失败
 		c.JSON(http.StatusOK, model.UserRegisterResponse{
 			Response: model.Response{StatusCode: -1, StatusMsg: errToken.Error()},
+		})
+		return
+	}
+	//登录
+	_, err = userservice.Login(username, password)
+	if err != nil {
+		// 注册跳转登录失败
+		c.JSON(http.StatusOK, model.UserLoginResponse{
+			Response: model.Response{StatusCode: -1, StatusMsg: err.Error()},
 		})
 		return
 	}

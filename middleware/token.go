@@ -6,6 +6,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"net/http"
 	"simple-douyin/model"
+	"strings"
 	"time"
 )
 
@@ -19,8 +20,8 @@ var (
 	effectTime = 1 * time.Hour
 	// 不需要校验token的路由
 	// noVerifyToken = []string{"/douyin/user/login", "/douyin/user/register", "/douyin/feed"}
-	noVerifyToken = map[string]bool{"/douyin/user/login": true,
-		"/douyin/user/register": true, "/douyin/feed": true}
+	noVerifyToken = map[string]bool{"/douyin/user/login/": true,
+		"/douyin/user/register/": true, "/douyin/feed/": true}
 )
 
 // GenerateToken 生成token
@@ -53,6 +54,9 @@ func VerifyToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// noVerifyToken中的请求不需要校验token
 		req := c.Request.RequestURI
+		//截取原始的URL，修改重定向
+		req = strings.Split(req, "?")[0]
+		fmt.Println(req)
 		if noVerifyToken[req] {
 			return
 		}
