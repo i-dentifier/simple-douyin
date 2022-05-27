@@ -11,7 +11,7 @@ func UserRouterInit(r *gin.RouterGroup) {
 	userRouter := r.Group("/user")
 	{
 		userRouter.GET("/", usercontroller.UserInfo)
-		userRouter.POST("/login", middleware.Validate(), usercontroller.Login)
-		userRouter.POST("/register", middleware.Validate(), usercontroller.Register)
+		userRouter.POST("/login/", middleware.Validate(), usercontroller.Login)
+		userRouter.POST("/register/", middleware.Validate(), usercontroller.Register)
 	}
 }
