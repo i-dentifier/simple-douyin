@@ -34,6 +34,15 @@ func Register(c *gin.Context) {
 		})
 		return
 	}
+	//登录
+	_, err = userservice.Login(username, password)
+	if err != nil {
+		// 注册跳转登录失败
+		c.JSON(http.StatusOK, model.UserLoginResponse{
+			Response: model.Response{StatusCode: -1, StatusMsg: err.Error()},
+		})
+		return
+	}
 	c.JSON(http.StatusOK, model.UserRegisterResponse{
 		Response: model.Response{StatusCode: 0, StatusMsg: "success"},
 		UserId:   userId,
