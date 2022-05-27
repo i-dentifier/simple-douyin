@@ -10,7 +10,7 @@ type User struct {
 	Name          string `json:"name"`
 	FollowCount   uint32 `json:"follow_count"`
 	FollowerCount uint32 `json:"follower_count"`
-	IsFollow      bool   `json:"is_follow"`
+	IsFollow      bool   `json:"is_follow" gorm:"-"`
 }
 
 type UserAuth struct {
