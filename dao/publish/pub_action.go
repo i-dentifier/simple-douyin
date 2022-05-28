@@ -1,4 +1,4 @@
-package publish
+package publishdao
 
 import (
 	"simple-douyin/config"

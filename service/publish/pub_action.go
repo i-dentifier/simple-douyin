@@ -6,9 +6,10 @@ import (
 	"golang.org/x/crypto/ssh"
 	"io"
 	"mime/multipart"
+	"os"
 	"os/exec"
 	"path/filepath"
-	publishdao "simple-douyin/dao/publish"
+	"simple-douyin/dao/publish"
 	"simple-douyin/model"
 	"strings"
 	"time"
@@ -104,7 +105,7 @@ func (p *PublishActionFlow) saveUploadedFile() error {
 	// 生成文件名和playUrl
 	filename := filepath.Base(p.data.Filename)
 	finalName := fmt.Sprintf("%d_%s", p.video.UserId, filename)
-	p.video.PlayUrl = filepath.Join("http://180.76.52.150/douyin/video/", finalName)
+	p.video.PlayUrl = "http://180.76.52.150/douyin/video/" + finalName
 
 	// 上传到服务器
 	return uploadFile(src, finalName, "video")
@@ -150,15 +151,21 @@ func (p *PublishActionFlow) saveCover() error {
 	// 2.执行ffmpeg命令
 	filename := strings.Split(filepath.Base(p.data.Filename), ".")[0]
 	finalName := fmt.Sprintf("%d_%s_cover.jpg", p.video.UserId, filename)
-	// p.video.CoverUrl = filepath.Join("./public/cover/", finalName)
 	p.video.CoverUrl = "http://180.76.52.150/douyin/cover/" + finalName
 
+	tmpCoverPath := filepath.Join("./public", finalName)
 	cmd := exec.Command("ffmpeg", "-i", p.video.PlayUrl,
-		"-y", "-ss", "00:00:00", "-frames", "1", p.video.CoverUrl)
+		"-y", "-ss", "00:00:00", "-frames", "1", tmpCoverPath)
 	if err := cmd.Run(); err != nil {
 		return err
 	}
-	return nil
+	src, err := os.Open(tmpCoverPath)
+	if err != nil {
+		return err
+	}
+	err = uploadFile(src, finalName, "cover")
+	os.Remove(tmpCoverPath)
+	return err
 }
 
 func (p *PublishActionFlow) CreateVideo() error {
