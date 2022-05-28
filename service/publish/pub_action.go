@@ -64,7 +64,7 @@ func (p *PublishActionFlow) saveUploadedFile() error {
 	//2.进行copy操作
 	filename := filepath.Base(p.data.Filename)
 	finalName := fmt.Sprintf("%d_%s", p.video.UserId, filename)
-	p.video.PlayUrl = filepath.Join(`./public/video/`, finalName)
+	p.video.PlayUrl = filepath.Join("./public/video/", finalName)
 	out, err := os.Create(p.video.PlayUrl)
 	if err != nil {
 		return err
@@ -86,11 +86,10 @@ func (p *PublishActionFlow) saveCover() error {
 	//2.执行ffmpeg命令
 	filename := strings.Split(filepath.Base(p.data.Filename), ".")[0]
 	finalName := fmt.Sprintf("%d_%s_cover.jpg", p.video.UserId, filename)
-	p.video.CoverUrl = filepath.Join(`./public/cover/`, finalName)
-	//s = "ffmpeg", "-i " + p.videoInfo.PlayUrl,
-	//	"-ss", "00:00:00", "-frames:v 1 ", p.videoInfo.CoverUrl
+	p.video.CoverUrl = filepath.Join("./public/cover/", finalName)
+
 	cmd := exec.Command("ffmpeg", "-i", p.video.PlayUrl,
-		"-ss", "00:00:00", "-frames", "1", p.video.CoverUrl)
+		"-y", "-ss", "00:00:00", "-frames", "1", p.video.CoverUrl)
 	if err := cmd.Run(); err != nil {
 		return err
 	}
