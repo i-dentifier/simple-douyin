@@ -31,6 +31,17 @@ ifconfig en0
 ```
 **重启抖音后如果出现熊的视频说明配置成功**
 
+- ### 数据库配置
+
+    - host: 180.76.52.150
+    - user: douyin
+    - password: douyin100@
+
+本机可以使用cmd连接访问
+```shell
+mysql -h 180.76.52.150 -u douyin -p
+```
+
 ## 已实现功能
 ### 1. 用户
 * 用户注册 `/douyin/user/register/`

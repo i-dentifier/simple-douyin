@@ -54,7 +54,7 @@ func VerifyToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// noVerifyToken中的请求不需要校验token
 		req := c.Request.RequestURI
-		//截取原始的URL，修改重定向
+		// 截取原始的URL，修改重定向
 		req = strings.Split(req, "?")[0]
 		fmt.Println(req)
 		if noVerifyToken[req] {
