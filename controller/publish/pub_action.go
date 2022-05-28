@@ -8,8 +8,8 @@ import (
 )
 
 func Publish(c *gin.Context) {
-	//1.data
-	//data := c.PostForm("data")
+	// 1.data
+	// data := c.PostForm("data")
 	data, err := c.FormFile("data")
 	if err != nil {
 		c.JSON(http.StatusOK, model.Response{
@@ -18,7 +18,7 @@ func Publish(c *gin.Context) {
 		})
 		return
 	}
-	//2.获取已鉴权后的claims
+	// 2.获取已鉴权后的claims
 	// token经middleware验证合法后将存入context
 	claims, exist := c.Get("user")
 	// 如果没有在context中查到用户说明未登录
@@ -32,9 +32,9 @@ func Publish(c *gin.Context) {
 		return
 	}
 	userClaims := claims.(*model.UserClaims)
-	//3.title
+	// 3.title
 	title := c.PostForm("title")
-	//4.调用service处理
+	// 4.调用service处理
 	if err := publishservice.Publish(data, title, userClaims.UserId); err != nil {
 		c.JSON(http.StatusOK, model.Response{
 			StatusCode: -1,
