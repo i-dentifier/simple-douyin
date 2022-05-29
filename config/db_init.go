@@ -24,10 +24,10 @@ func DBInit() error {
 	var err error
 	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=%s&loc=%s&timeout=%s",
 		// 数据库用户名
-		"root",
+		"douyin",
 		// 数据库密码
-		"123456",
-		"localhost:3306",
+		"douyin100@",
+		"180.76.52.150",
 		// 库名
 		"simple_douyin",
 		"utf8mb4",

@@ -21,18 +21,20 @@ func NewFeedFlow(lastTime, token string) (f *FeedFlow) {
 }
 
 func (f *FeedFlow) FetchVideos(lastTime, token string) ([]model.Video, error) {
+	// 默认为现在时间
 	search_time := time.Now()
 	if lastTime != "" {
 		var err error
+		// 若给定具体时间，将其转换为东八区时间
 		shanghaiZone, _ := time.LoadLocation("Asia/Shanghai")
 		search_time, err = time.ParseInLocation("2006-01-02 15:04:05", lastTime, shanghaiZone)
 		if err != nil {
-			return DemoVideos, err
+			return nil, err
 		}
 	}
 	feed, err := f.feedDao.Fetch(search_time)
 	if err != nil {
-		return DemoVideos, nil
+		return nil, nil
 	}
 	return feed, nil
 }

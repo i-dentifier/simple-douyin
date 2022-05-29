@@ -19,7 +19,15 @@ func Feed(c *gin.Context) {
 	last_time := c.Query("last_time")
 	token := c.Query("token")
 
-	Videos, _ := feedservice.Feed(last_time, token)
+	Videos, err := feedservice.Feed(last_time, token)
+
+	if err != nil {
+		c.JSON(http.StatusOK, model.Response{
+			StatusCode: 1,
+			StatusMsg:  err.Error(),
+		})
+		return
+	}
 
 	c.JSON(http.StatusOK, FeedResponse{
 		Response:  model.Response{StatusCode: 0, StatusMsg: "success"},
