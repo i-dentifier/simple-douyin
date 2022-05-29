@@ -29,8 +29,8 @@ type UserLoginResponse struct {
 
 func Login(c *gin.Context) {
 
-	username := c.PostForm("username")
-	password := c.PostForm("password")
+	username := c.Query("username")
+	password := c.Query("password")
 	userId, errLogin := userservice.Login(username, password)
 	if errLogin != nil {
 		// 登录失败
