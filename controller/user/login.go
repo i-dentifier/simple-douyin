@@ -21,13 +21,20 @@ import (
 // 	},
 // }
 
+type UserLoginResponse struct {
+	model.Response
+	UserId uint32 `json:"user_id"`
+	Token  string `json:"token"`
+}
+
 func Login(c *gin.Context) {
+
 	username := c.Query("username")
 	password := c.Query("password")
 	userId, errLogin := userservice.Login(username, password)
 	if errLogin != nil {
 		// 登录失败
-		c.JSON(http.StatusOK, model.UserLoginResponse{
+		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: model.Response{StatusCode: -1, StatusMsg: errLogin.Error()},
 		})
 		return
@@ -36,13 +43,13 @@ func Login(c *gin.Context) {
 	token, errToken := middleware.GenerateToken(userId)
 	if errToken != nil {
 		// token生成失败
-		c.JSON(http.StatusOK, model.UserLoginResponse{
+		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: model.Response{StatusCode: -1, StatusMsg: errToken.Error()},
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, model.UserLoginResponse{
+	c.JSON(http.StatusOK, UserLoginResponse{
 		Response: model.Response{StatusCode: 0, StatusMsg: "success"},
 		UserId:   userId,
 		Token:    token,

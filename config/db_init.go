@@ -20,7 +20,7 @@ type Mysql struct {
 	Loc       string
 }
 
-func DBInit() {
+func DBInit() error {
 	var err error
 	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=%s&loc=%s&timeout=%s",
 		// 数据库用户名
@@ -48,7 +48,9 @@ func DBInit() {
 	if err = DB.AutoMigrate(&model.UserAuth{}); err != nil {
 		panic("failed to auto migrate database user_auths")
 	}
+
 	if err = DB.AutoMigrate(&model.Video{}); err != nil {
 		panic("failed to auto migrate database videos")
 	}
+	return nil
 }

@@ -46,3 +46,24 @@ CREATE TABLE `relationships` (
     `status` tinyint NOT NULL DEFAULT 0 COMMENT '0: unidirectional follow, 1: bidirectional follow',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS `videos`;
+CREATE TABLE  `videos` (
+    -- 自增主键
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+    -- 播放地址
+   `play_url` varchar(128) NOT NULL ,
+   -- 封面地址
+   `cover_url` varchar(128) NOT NULL ,
+   -- 点赞数量
+    `favorite_count` int(64) NOT NULL ,
+    -- 评论数量
+    `comment_count` int(64) NOT NULL,
+    -- 是否点赞
+    `is_favorite` int NOT NULL ,
+    -- 标题
+    `title` varchar(64) NOT NULL,
+    -- 发布时间
+    `create_at` datetime DEFAULT NOW() COMMENT '发布时间' ,
+      PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
