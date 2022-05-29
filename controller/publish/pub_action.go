@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"simple-douyin/model"
-	publishservice "simple-douyin/service/publish"
+	"simple-douyin/service/publish"
 )
 
 func Publish(c *gin.Context) {

@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"simple-douyin/model"
-	userservice "simple-douyin/service/user"
+	"simple-douyin/service/user"
 	"strconv"
 )
 

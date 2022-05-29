@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
-	userdao "simple-douyin/dao/user"
+	"simple-douyin/dao/user"
 )
 
 func Register(username string, password string) (uint32, error) {

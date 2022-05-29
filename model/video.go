@@ -3,19 +3,19 @@ package model
 import "time"
 
 type Video struct {
-	Id            uint32 `json:"id,omitempty" gorm:"primaryKey"`
-	Author        User   `json:"author" gorm:"-"`
-	UserId        uint32
+	Id            uint32    `json:"id" gorm:"primaryKey"`
+	Author        *User     `json:"author" gorm:"-"`
+	UserId        uint32    `json:"-"`
 	PlayUrl       string    `json:"play_url"`
-	CoverUrl      string    `json:"cover_url,omitempty"`
-	FavoriteCount uint32    `json:"favorite_count,omitempty"`
-	CommentCount  uint32    `json:"comment_count,omitempty"`
-	IsFavorite    bool      `json:"is_favorite,omitempty"`
+	CoverUrl      string    `json:"cover_url"`
+	FavoriteCount uint32    `json:"favorite_count"`
+	CommentCount  uint32    `json:"comment_count"`
+	IsFavorite    bool      `json:"is_favorite"`
 	Title         string    `json:"title"`
-	CreateAt      time.Time `gorm:"autoCreateTime;index"`
+	CreateAt      time.Time `json:"-" gorm:"autoCreateTime;index"`
 }
 
 type VideoListResponse struct {
 	Response
-	VideoList []Video `json:"video_list"`
+	VideoList []*Video `json:"video_list"`
 }

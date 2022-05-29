@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"simple-douyin/middleware"
 	"simple-douyin/model"
-	userservice "simple-douyin/service/user"
+	"simple-douyin/service/user"
 )
 
 // usersLoginInfo use map to store user info, and key is username+password for demo
