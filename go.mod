@@ -3,9 +3,9 @@ module simple-douyin
 go 1.17
 
 require (
-	github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1
 	github.com/gin-gonic/gin v1.7.7
 	github.com/golang-jwt/jwt/v4 v4.4.1
+	github.com/pkg/sftp v1.13.4
 	golang.org/x/crypto v0.0.0-20220518034528-6f7dac969898
 	gorm.io/driver/mysql v1.3.3
 	gorm.io/gorm v1.23.5
@@ -21,6 +21,7 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/kr/fs v0.1.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect

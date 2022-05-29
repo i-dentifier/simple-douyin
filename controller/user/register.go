@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"simple-douyin/middleware"
 	"simple-douyin/model"
-	userservice "simple-douyin/service/user"
+	"simple-douyin/service/user"
 )
 
 func Register(c *gin.Context) {

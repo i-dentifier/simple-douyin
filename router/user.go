@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	usercontroller "simple-douyin/controller/user"
+	"simple-douyin/controller/user"
 	"simple-douyin/middleware"
 )
 

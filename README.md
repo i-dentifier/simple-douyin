@@ -31,6 +31,17 @@ ifconfig en0
 ```
 **重启抖音后如果出现熊的视频说明配置成功**
 
+- ### 数据库配置
+
+    - host: 180.76.52.150
+    - user: douyin
+    - password: douyin100@
+
+本机可以使用cmd连接访问
+```shell
+mysql -h 180.76.52.150 -u douyin -p
+```
+
 ## 已实现功能
 ### 1. 用户
 * 用户注册 `/douyin/user/register/`
@@ -40,6 +51,13 @@ ifconfig en0
 用户在注册和登录后会由服务器颁发token用于鉴权，token有效期为2小时
 
 需要用户登录前置操作的接口都会接入中间件进行token验证，非法token和过期token将无法通过验证
+### 2.Publish
+* 投稿操作 `/douyin/publish/action/`
+* 投稿列表 `/douyin/publish/list/`
+
+用户投稿和获取投稿列表都需要token登录的鉴权，目前还未对接点赞和评论的操作
+注：查看视频会闪退
+
 
 其余接口建议进行分类，例如user相关的接口在controller, service, dao层分别建立user目录，其中所有文件都统一package为usercontroller, userservice, userdao
 

@@ -35,7 +35,9 @@ func DBInit() error {
 		"Local",
 		"10s",
 	)
-	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+		DisableForeignKeyConstraintWhenMigrating: true,
+	})
 	if err != nil {
 		panic("failed to connect mysql")
 	}
