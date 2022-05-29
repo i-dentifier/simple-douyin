@@ -46,3 +46,28 @@ CREATE TABLE `relationships` (
     `status` tinyint NOT NULL DEFAULT 0 COMMENT '0: unidirectional follow, 1: bidirectional follow',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS `videos`;
+CREATE TABLE  `videos` (
+    -- 自增主键
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+    -- 播放地址
+   `play_url` varchar(128) NOT NULL ,
+   -- 封面地址
+   `cover_url` varchar(128) NOT NULL ,
+   -- 点赞数量
+    `favorite_count` int(64) NOT NULL ,
+    -- 评论数量
+    `comment_count` int(64) NOT NULL,
+    -- 是否点赞
+    `is_favorite` int NOT NULL ,
+    -- 标题
+    `title` varchar(64) NOT NULL,
+    -- 发布时间
+    `create_at` datetime DEFAULT NOW() COMMENT '发布时间' ,
+      PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+insert into videos values (1, 'http://192.168.2.27:8080/static/bear.mp4', 'https://cdn.pixabay.com/photo/2016/03/27/18/10/bear-1283347_1280.jpg', 100, 20, 1, 'Hello', DEFAULT);
+insert into videos values (2, 'http://192.168.2.27:8080/static/bear.mp4', 'https://cdn.pixabay.com/photo/2016/03/27/18/10/bear-1283347_1280.jpg', 100, 20, 1, 'Yep', DEFAULT);
+insert into videos values (3, 'http://192.168.2.27:8080/static/bear.mp4', 'https://cdn.pixabay.com/photo/2016/03/27/18/10/bear-1283347_1280.jpg', 100, 20, 1, 'Lastest', DEFAULT);

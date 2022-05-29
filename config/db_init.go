@@ -46,5 +46,9 @@ func DBInit() error {
 	if err = DB.AutoMigrate(&model.UserAuth{}); err != nil {
 		panic("failed to auto migrate database user_auths")
 	}
+
+	if err = DB.AutoMigrate(&model.Video{}); err != nil {
+		panic("failed to auto migrate database videos")
+	}
 	return nil
 }

@@ -60,11 +60,6 @@ func VerifyToken() gin.HandlerFunc {
 		if noVerifyToken[req] {
 			return
 		}
-		// for _, str := range noVerifyToken {
-		//	if req == str {
-		//		return
-		//	}
-		// }
 
 		// token可能是GET或者POST传入
 		token := c.Query("token")

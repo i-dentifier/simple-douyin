@@ -1,4 +1,4 @@
-package feedcontroller
+package feedservice
 
 import "simple-douyin/model"
 

@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"simple-douyin/model"
+	feedservice "simple-douyin/service/feed"
 	"time"
 )
 
@@ -15,11 +16,14 @@ type FeedResponse struct {
 
 func Feed(c *gin.Context) {
 
-	_ = c.PostForm("last_time")
+	last_time := c.Query("last_time")
+	token := c.Query("token")
+
+	Videos, _ := feedservice.Feed(last_time, token)
 
 	c.JSON(http.StatusOK, FeedResponse{
 		Response:  model.Response{StatusCode: 0, StatusMsg: "success"},
-		VideoList: DemoVideos,
+		VideoList: Videos,
 		NextTime:  time.Now().Unix(),
 	})
 }
