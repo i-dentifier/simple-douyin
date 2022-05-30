@@ -16,7 +16,7 @@ type PublishActionFlow struct {
 	pubActionDao *publishdao.PubActionDao
 	video        *model.Video
 	data         *multipart.FileHeader
-	curTime      time.Time
+	curTime      string
 }
 
 func Publish(data *multipart.FileHeader, title string, userId uint32) error {
@@ -28,7 +28,7 @@ func newPublishActionFlow(data *multipart.FileHeader, title string, userId uint3
 		pubActionDao: publishdao.NewPubActionDaoInstance(),
 		video:        &model.Video{Title: title, UserId: userId},
 		data:         data,
-		curTime:      time.Now(),
+		curTime:      time.Now().Format("20060102_150405"),
 	}
 }
 
@@ -62,7 +62,7 @@ func (p *PublishActionFlow) saveUploadedFile() error {
 	// 生成文件名和playUrl
 	ext := filepath.Ext(p.data.Filename)
 	// 文件名uid_YYYYMMDD_hhmmss.(ext)
-	finalName := fmt.Sprintf("%d_%v%v", p.video.UserId, p.curTime.Format("20060102_150405"), ext)
+	finalName := fmt.Sprintf("%d_%v%v", p.video.UserId, p.curTime, ext)
 	// 目录名douyin/video/
 	p.video.PlayUrl = "http://180.76.52.150/douyin/video/" + finalName
 
@@ -108,7 +108,7 @@ func (p *PublishActionFlow) saveCover() error {
 	// 2.执行ffmpeg命令
 
 	// 文件名uid_YYYYMMDD_hhmmss.jpg
-	finalName := fmt.Sprintf("%d_%v", p.video.UserId, p.curTime.Format("20060102_150405.jpg"))
+	finalName := fmt.Sprintf("%d_%v.jpg", p.video.UserId, p.curTime)
 	// 目录名 douyin/cover/
 	p.video.CoverUrl = "http://180.76.52.150/douyin/cover/" + finalName
 	tmpCoverPath := filepath.Join("./public/", finalName)

@@ -1,26 +1,31 @@
 package publishservice
 
 import (
+	favoritedao "simple-douyin/dao/favorite"
 	"simple-douyin/dao/publish"
 	"simple-douyin/dao/user"
 	"simple-douyin/model"
 )
 
 type PublishListFlow struct {
-	userInfoDao *userdao.UserInfoDao
-	pubListDao  *publishdao.PubListDao
-	videoList   []*model.Video
-	author      *model.User
+	userInfoDao  *userdao.UserInfoDao
+	pubListDao   *publishdao.PubListDao
+	favActionDao *favoritedao.FavActionDao
+	videoList    []*model.Video
+	author       *model.User // 要访问的用户的author，只查询一次后面用拷贝的方式修改
+	loginUserId  uint32
 }
 
-func PublishList(userId uint32) ([]*model.Video, error) {
-	return newPublishListFlow(userId).do()
+func PublishList(loginUserId, otherUserId uint32) ([]*model.Video, error) {
+	return newPublishListFlow(loginUserId, otherUserId).do()
 }
 
-func newPublishListFlow(userId uint32) *PublishListFlow {
+func newPublishListFlow(loginUserId, otherUserId uint32) *PublishListFlow {
 	return &PublishListFlow{userInfoDao: userdao.NewUserInfoDaoInstance(),
-		pubListDao: publishdao.NewPubListDaoInstance(),
-		author:     &model.User{Id: userId},
+		pubListDao:   publishdao.NewPubListDaoInstance(),
+		favActionDao: favoritedao.NewFavActionDaoInstance(),
+		author:       &model.User{Id: otherUserId},
+		loginUserId:  loginUserId,
 	}
 }
 
@@ -51,6 +56,11 @@ func (p *PublishListFlow) getvideoList() ([]*model.Video, error) {
 
 func (p *PublishListFlow) prepareVideoList() {
 	for _, video := range p.videoList {
+		// 喜好查询
+		if p.favActionDao.CheckIsFavorite(p.loginUserId, video.Id) {
+			video.IsFavorite = true
+		}
+		// 加入author信息
 		video.Author = p.author
 	}
 }
