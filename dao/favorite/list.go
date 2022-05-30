@@ -18,7 +18,8 @@ func GetVideoList(userId uint32) ([]*model.Video, error) {
 	}
 
 	var videoList []*model.Video
-	config.DB.Where(videoIds).Find(&videoList) //videoId 主键查询所有视频
+	// 添加Preload将video与其发布者关联起来
+	config.DB.Preload("Author").Where(videoIds).Find(&videoList) //videoId 主键查询所有视频
 
 	return videoList, nil
 }
