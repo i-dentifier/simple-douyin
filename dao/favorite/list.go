@@ -1,0 +1,24 @@
+package favoritedao
+
+import (
+	"simple-douyin/config"
+	"simple-douyin/model"
+)
+
+func GetVideoList(userId uint32) ([]*model.Video, error) {
+	favorites := []model.Favorite{}
+	if res := config.DB.Where("user_id = ?", userId).Select("video_id").Find(&favorites); res.Error != nil {
+		return nil, res.Error
+	}
+
+	// videoIds 该用户所有点赞的视频id
+	videoIds := make([]uint32, 0, len(favorites))
+	for i := 0; i < len(favorites); i++ {
+		videoIds = append(videoIds, favorites[i].VideoId)
+	}
+
+	var videoList []*model.Video
+	config.DB.Where(videoIds).Find(&videoList) //videoId 主键查询所有视频
+
+	return videoList, nil
+}
