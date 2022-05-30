@@ -18,12 +18,9 @@ func (f *FavoriteListFlow) doList() ([]*model.Video, error) {
 		return nil, err
 	}
 
-	// 每个点赞视频获取视频作者
-	for _, video := range videoList {
-		video.Author, err = getUserInfo(video.UserId)
-		if err != nil {
-			return nil, err
-		}
+	// 每个点赞视频加入点赞信息
+	if err = f.prepareFavVideo(); err != nil {
+		return nil, err
 	}
 	return f.videoList, nil
 }
@@ -32,19 +29,10 @@ func (f *FavoriteListFlow) getFavVideoList() ([]*model.Video, error) {
 	return f.favListDao.GetVideoList(f.userId)
 }
 
-func (f *FavoriteListFlow) getUserInfo(userId uint32) (*model.User, error) {
-	user, err := f.userInfoDao.GetUserBasicInfo(userId)
-	return user, err
-}
-
 func (f *FavoriteListFlow) prepareFavVideo() (err error) {
 
-	// 每个点赞视频获取视频作者
+	// 每个点赞视频加入点赞信息
 	for _, video := range f.videoList {
-		video.Author, err = f.getUserInfo(video.UserId)
-		if err != nil {
-			return err
-		}
 		video.IsFavorite = true
 	}
 	return nil

@@ -34,9 +34,11 @@ func List(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, model.VideoListResponse{Response: model.Response{
-		StatusCode: 0,
-		StatusMsg:  "fail to get favorite video list",
-	},
-		VideoList: videoList})
+	c.JSON(http.StatusOK, model.VideoListResponse{
+		Response: model.Response{
+			StatusCode: 0,
+			StatusMsg:  "fail to get favorite video list",
+		},
+		VideoList: videoList,
+	})
 }
