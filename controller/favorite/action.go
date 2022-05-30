@@ -11,8 +11,8 @@ import (
 
 func Action(c *gin.Context) {
 
-	videoIdString := c.PostForm("video_id")
-	actionType := c.PostForm("action_type")
+	videoIdString := c.Query("video_id")
+	actionType := c.Query("action_type")
 
 	// token经middleware验证合法后将存入context
 	claims, exists := c.Get("user")
