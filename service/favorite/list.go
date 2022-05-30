@@ -17,6 +17,7 @@ func List(userId uint32) (*model.VideoListResponse, error) {
 	// 每个点赞视频获取视频作者
 	for _, video := range videoList {
 		video.Author, err = getUserInfo(video.UserId)
+		video.IsFavorite = true
 		if err != nil {
 			return nil, err
 		}
