@@ -3,51 +3,79 @@ package favoritedao
 import (
 	"simple-douyin/config"
 	"simple-douyin/model"
+	"sync"
 )
 
-func CreateFavorite(userId, videoId uint32) error {
+var (
+	favActionOnce sync.Once
+	favActionDao  *FavActionDao
+)
 
+type FavActionDao struct {
+}
+
+func NewFavActionDaoInstance() *FavActionDao {
+	favActionOnce.Do(func() {
+		favActionDao = &FavActionDao{}
+	})
+	return favActionDao
+}
+
+func (f *FavActionDao) CreateFavorite(userId, videoId uint32) error {
+	// 开启事务
+	tx := config.DB.Begin()
 	// videos 的 favorite_count 字段加 1
 	video := model.Video{}
-	if res := config.DB.Where("id = ?", videoId).First(&video); res.Error != nil {
+	if res := tx.Where("id = ?", videoId).First(&video); res.Error != nil {
+		tx.Rollback()
 		return res.Error
 	}
 	video.FavoriteCount++
-	config.DB.Save(&video)
+	if res := tx.Save(&video); res.Error != nil {
+		tx.Rollback()
+		return res.Error
+	}
 
 	// 增加一条favorite记录
 	favorite := model.Favorite{
 		UserId:  userId,
 		VideoId: videoId,
 	}
-	if result := config.DB.Create(favorite); result.Error != nil {
+	if result := tx.Create(favorite); result.Error != nil {
+		tx.Rollback()
 		return result.Error
 	}
+	// 提交事务
+	tx.Commit()
 	return nil
 }
 
-func CancelFavorite(userId, videoId uint32) error {
-
+func (f *FavActionDao) CancelFavorite(userId, videoId uint32) error {
+	tx := config.DB.Begin()
 	// videos 的 favorite_count 字段减 1
 	video := model.Video{}
-	if res := config.DB.Where("id = ?", videoId).First(&video); res.Error != nil {
+	if res := tx.Where("id = ?", videoId).First(&video); res.Error != nil {
+		tx.Rollback()
 		return res.Error
 	}
 	video.FavoriteCount--
-	config.DB.Save(&video)
+	if res := tx.Save(&video); res.Error != nil {
+		tx.Rollback()
+		return res.Error
+	}
 
 	// 删除 favorite 字段
 	if result := config.DB.Where("user_id = ? AND video_id = ?", userId, videoId).Delete(&model.Favorite{}); result.Error != nil {
+		tx.Rollback()
 		return result.Error
 	}
+	// 提交事务
+	tx.Commit()
 	return nil
 }
 
-func CheckIsFavorite(userId, videoId uint32) bool {
+func (f *FavActionDao) CheckIsFavorite(userId, videoId uint32) bool {
 	result := config.DB.Where("user_id = ? AND video_id = ?", userId, videoId).First(&model.Favorite{})
-	if result.Error == nil {
-		// 没有错误，找到了
-		return true
-	}
-	return false
+	// 没有错误，找到了
+	return result.Error == nil
 }
