@@ -2,7 +2,6 @@ package favoriteservice
 
 import (
 	"errors"
-	"fmt"
 	favoritedao "simple-douyin/dao/favorite"
 	"time"
 )
@@ -18,7 +17,7 @@ func Action(userId, videoId uint32, actionType string) error {
 	} else if actionType == "2" {
 		return newFavoriteActionFlow(userId, videoId).doCancel()
 	} else {
-		fmt.Println("actionType error")
+		return errors.New("actionType error")
 	}
 	return nil
 }
@@ -26,13 +25,13 @@ func Action(userId, videoId uint32, actionType string) error {
 func (f *FavoriteActionFlow) doFavorite() error {
 
 	// 检查是否已点赞
-	exists := favoritedao.CheckIsFavorite(f.userId, f.videoId)
+	exists := f.favActionDao.CheckIsFavorite(f.userId, f.videoId)
 	if exists {
 		return errors.New("video has been favorited")
 	}
 
 	// 点赞
-	err := favoritedao.CreateFavorite(f.userId, f.videoId)
+	err := f.favActionDao.CreateFavorite(f.userId, f.videoId)
 	if err != nil {
 		return err
 	}
@@ -43,13 +42,13 @@ func (f *FavoriteActionFlow) doFavorite() error {
 func (f *FavoriteActionFlow) doCancel() error {
 
 	// 检查是否没点赞
-	exists := favoritedao.CheckIsFavorite(f.userId, f.videoId)
+	exists := f.favActionDao.CheckIsFavorite(f.userId, f.videoId)
 	if !exists {
 		return errors.New("video has not been favorited")
 	}
 
 	// 取消点赞
-	err := favoritedao.CancelFavorite(f.userId, f.videoId)
+	err := f.favActionDao.CancelFavorite(f.userId, f.videoId)
 	if err != nil {
 		return err
 	}
@@ -59,13 +58,15 @@ func (f *FavoriteActionFlow) doCancel() error {
 
 func newFavoriteActionFlow(userId, videoId uint32) *FavoriteActionFlow {
 	return &FavoriteActionFlow{
-		userId:  userId,
-		videoId: videoId,
+		favActionDao: favoritedao.NewFavActionDaoInstance(),
+		userId:       userId,
+		videoId:      videoId,
 	}
 }
 
 type FavoriteActionFlow struct {
-	userId     uint32
-	videoId    uint32
-	modifyTime time.Time
+	favActionDao *favoritedao.FavActionDao
+	userId       uint32
+	videoId      uint32
+	modifyTime   time.Time
 }

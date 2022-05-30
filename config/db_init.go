@@ -54,7 +54,7 @@ func DBInit() error {
 	}
 
 	if err = DB.AutoMigrate(&model.Favorite{}); err != nil {
-		panic("failed to auto migrate database favorite")
+		panic("failed to auto migrate database favorites")
 	}
 	return nil
 }

@@ -11,8 +11,8 @@ import (
 
 func PublishList(c *gin.Context) {
 	// 1.获取userid
-	userIdStr := c.Query("user_id")
-	userIdInt, err := strconv.Atoi(userIdStr)
+	otherUserIdStr := c.Query("user_id")
+	otherUserIdInt, err := strconv.Atoi(otherUserIdStr)
 	if err != nil {
 		c.JSON(http.StatusOK, model.UserResponse{
 			Response: model.Response{
@@ -22,7 +22,7 @@ func PublishList(c *gin.Context) {
 		})
 		return
 	}
-	userId := uint32(userIdInt)
+	otherUserId := uint32(otherUserIdInt)
 	// 2.获取已鉴权后的claims
 	// token经middleware验证合法后将存入context
 	claims, exist := c.Get("user")
@@ -38,7 +38,7 @@ func PublishList(c *gin.Context) {
 		return
 	}
 	// 3.调用service处理
-	videoList, err := publishservice.PublishList(userId)
+	videoList, err := publishservice.PublishList(userClaims.UserId, otherUserId)
 	if err != nil {
 		c.JSON(http.StatusOK, model.Response{
 			StatusCode: -1,

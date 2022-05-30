@@ -23,7 +23,7 @@ func List(c *gin.Context) {
 	}
 	userClaims := claims.(*model.UserClaims)
 	userId := userClaims.UserId
-	response, err := favoriteservice.List(userId)
+	videoList, err := favoriteservice.List(userId)
 	if err != nil {
 		c.JSON(http.StatusOK, model.UserResponse{
 			Response: model.Response{
@@ -34,5 +34,9 @@ func List(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, response)
+	c.JSON(http.StatusOK, model.VideoListResponse{Response: model.Response{
+		StatusCode: 0,
+		StatusMsg:  "fail to get favorite video list",
+	},
+		VideoList: videoList})
 }

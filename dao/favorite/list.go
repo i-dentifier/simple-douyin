@@ -3,10 +3,26 @@ package favoritedao
 import (
 	"simple-douyin/config"
 	"simple-douyin/model"
+	"sync"
 )
 
-func GetVideoList(userId uint32) ([]*model.Video, error) {
-	favorites := []model.Favorite{}
+var (
+	favListOnce sync.Once
+	favListDao  *FavListDao
+)
+
+type FavListDao struct {
+}
+
+func NewFavListDaoInstance() *FavListDao {
+	favListOnce.Do(func() {
+		favListDao = &FavListDao{}
+	})
+	return favListDao
+}
+
+func (f *FavListDao) GetVideoList(userId uint32) ([]*model.Video, error) {
+	var favorites []model.Favorite
 	if res := config.DB.Where("user_id = ?", userId).Select("video_id").Find(&favorites); res.Error != nil {
 		return nil, res.Error
 	}
