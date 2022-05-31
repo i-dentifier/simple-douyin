@@ -32,9 +32,11 @@ func (f *FeedDao) AddFavorite(feed_list []*model.Video, userId uint32) []*model.
 	// 更新videos中的favorite字段
 	for _, video := range feed_list {
 		var favorite_count, follow_count int64
+		// 登录用户已点赞该视频
 		if config.DB.Model(&model.Favorite{}).Where("user_id = ? and video_id = ?", userId, video.Id).Count(&favorite_count); favorite_count != 0 {
 			video.IsFavorite = true
 		}
+		// 登录用户已关注该作者
 		if config.DB.Model(&model.Relationship{}).Where("from_user_id = ? and to_user_id = ?", userId, video.UserId).Count(&follow_count); follow_count != 0 {
 			video.Author.IsFollow = true
 		}
