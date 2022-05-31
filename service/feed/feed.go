@@ -10,17 +10,17 @@ type FeedFlow struct {
 	feedDao *feeddao.FeedDao
 }
 
-func Feed(lastTime, token string) ([]model.Video, error) {
-	return NewFeedFlow(lastTime, token).FetchVideos(lastTime, token)
+func Feed(lastTime string, userId uint32, isLogin bool) ([]*model.Video, error) {
+	return NewFeedFlow().FetchVideos(lastTime, userId, isLogin)
 }
 
-func NewFeedFlow(lastTime, token string) (f *FeedFlow) {
+func NewFeedFlow() (f *FeedFlow) {
 	return &FeedFlow{
 		feedDao: feeddao.NewFeedDaoInstance(),
 	}
 }
 
-func (f *FeedFlow) FetchVideos(lastTime, token string) ([]model.Video, error) {
+func (f *FeedFlow) FetchVideos(lastTime string, userId uint32, isLogin bool) ([]*model.Video, error) {
 	// 默认为现在时间
 	search_time := time.Now()
 	if lastTime != "" {
@@ -32,9 +32,14 @@ func (f *FeedFlow) FetchVideos(lastTime, token string) ([]model.Video, error) {
 			return nil, err
 		}
 	}
-	feed, err := f.feedDao.Fetch(search_time)
+	feed_list, err := f.feedDao.Fetch(search_time)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
-	return feed, nil
+
+	// 若用户已经登录，添加点每个视频的点赞/关注信息
+	if isLogin {
+		feed_list = f.feedDao.AddFavorite(feed_list, userId)
+	}
+	return feed_list, nil
 }

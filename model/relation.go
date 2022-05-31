@@ -10,5 +10,15 @@ type Relationship struct {
 
 type ActionResponse struct {
 	Response
-	RelationId uint32 `json:"user_id"`
+	RelationId uint32 `json:"relation_id"`
+}
+
+type FollowListResponse struct {
+	Response
+	FollowList []*User `json:"user_list"`
+}
+
+type FollowerListResponse struct {
+	Response
+	FollowerList []*User `json:"user_list"`
 }

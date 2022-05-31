@@ -57,7 +57,7 @@ func VerifyToken() gin.HandlerFunc {
 		// 截取原始的URL，修改重定向
 		req = strings.Split(req, "?")[0]
 		fmt.Println(req)
-		if noVerifyToken[req] {
+		if noVerifyToken[req] && c.Query("token") == "" {
 			return
 		}
 

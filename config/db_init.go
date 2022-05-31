@@ -53,6 +53,10 @@ func DBInit() error {
 		panic("failed to auto migrate database videos")
 	}
 
+	if err = DB.AutoMigrate(&model.Favorite{}); err != nil {
+		panic("failed to auto migrate database favorites")
+	}
+
 	if err = DB.AutoMigrate(&model.Relationship{}); err != nil {
 		panic("failed to auto migrate database relations")
 	}

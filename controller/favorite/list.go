@@ -1,14 +1,14 @@
-package relationcontroller
+package favoritecontroller
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"simple-douyin/model"
-	relationservice "simple-douyin/service/relation"
+	favoriteservice "simple-douyin/service/favorite"
+
+	"github.com/gin-gonic/gin"
 )
 
-func FollowList(c *gin.Context) {
-
+func List(c *gin.Context) {
 	// token经middleware验证合法后将存入context
 	claims, exists := c.Get("user")
 	// 如果没有在context中查到用户说明未登录
@@ -16,29 +16,29 @@ func FollowList(c *gin.Context) {
 		c.JSON(http.StatusOK, model.UserResponse{
 			Response: model.Response{
 				StatusCode: -1,
-				StatusMsg:  "login required to get follow list",
+				StatusMsg:  "login required to get favorite list",
 			},
 		})
 		return
 	}
 	userClaims := claims.(*model.UserClaims)
 	userId := userClaims.UserId
-	followList, err := relationservice.FollowList(userId)
+	videoList, err := favoriteservice.List(userId)
 	if err != nil {
 		c.JSON(http.StatusOK, model.UserResponse{
 			Response: model.Response{
 				StatusCode: -1,
-				StatusMsg:  "get follow list error",
+				StatusMsg:  "get favorite list error",
 			},
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, model.FollowListResponse{
+	c.JSON(http.StatusOK, model.VideoListResponse{
 		Response: model.Response{
 			StatusCode: 0,
-			StatusMsg:  "success",
+			StatusMsg:  "fail to get favorite video list",
 		},
-		FollowList: followList,
+		VideoList: videoList,
 	})
 }

@@ -10,16 +10,23 @@ import (
 
 type FeedResponse struct {
 	model.Response
-	VideoList []model.Video `json:"video_list,omitempty"`
-	NextTime  int64         `json:"next_time,omitempty"`
+	VideoList []*model.Video `json:"video_list,omitempty"`
+	NextTime  int64          `json:"next_time,omitempty"`
 }
 
 func Feed(c *gin.Context) {
 
 	last_time := c.Query("last_time")
-	token := c.Query("token")
 
-	Videos, err := feedservice.Feed(last_time, token)
+	var userId uint32
+	var islogin bool
+	if token := c.Query("token"); token != "" {
+		claims, _ := c.Get("user")
+		userId = claims.(*model.UserClaims).UserId
+		islogin = true
+	}
+
+	Videos, err := feedservice.Feed(last_time, userId, islogin)
 
 	if err != nil {
 		c.JSON(http.StatusOK, model.Response{
