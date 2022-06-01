@@ -11,6 +11,6 @@ func RelationRouterInit(r *gin.RouterGroup) {
 	{
 		commentRouter.POST("/action/", relationcontroller.Action)
 		commentRouter.GET("follow/list/", relationcontroller.FollowList)
-		commentRouter.GET("follower/list/", nil)
+		commentRouter.GET("follower/list/", relationcontroller.FollowerList)
 	}
 }
