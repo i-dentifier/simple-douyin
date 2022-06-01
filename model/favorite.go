@@ -1,7 +1,7 @@
 package model
 
 type Favorite struct {
-	UserId  uint32
+	UserId  uint32 `gorm:"index"`
 	VideoId uint32
 }
 
