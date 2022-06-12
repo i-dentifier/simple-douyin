@@ -60,5 +60,9 @@ func DBInit() error {
 	if err = DB.AutoMigrate(&model.Relationship{}); err != nil {
 		panic("failed to auto migrate database relations")
 	}
+
+	if err = DB.AutoMigrate(&model.Comment{}); err != nil {
+		panic("failed to auto migrate database comment")
+	}
 	return nil
 }

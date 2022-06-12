@@ -5,13 +5,6 @@ type Response struct {
 	StatusMsg  string `json:"status_msg,omitempty"`
 }
 
-type Comment struct {
-	Id         int64  `json:"id,omitempty"`
-	User       User   `json:"user"`
-	Content    string `json:"content,omitempty"`
-	CreateDate string `json:"create_date,omitempty"`
-}
-
 // Relationship 对应一个关注/粉丝关系
 /*type Relationship struct {
 	Id         uint64 `json:"id,omitempty"`
