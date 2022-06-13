@@ -30,7 +30,7 @@ func (f *FeedDao) Fetch(checkTime time.Time) ([]*model.Video, error) {
 }
 
 func (f *FeedDao) AddFavorite(feedList []*model.Video, userId uint32) []*model.Video {
-	// 更新videos中的favorite字段
+	// 更新videos中的favorite/comment字段
 	for _, video := range feedList {
 		var favoriteCount, followCount int64
 		// 登录用户已点赞该视频

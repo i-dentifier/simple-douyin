@@ -24,7 +24,7 @@ func Action(c *gin.Context) {
 		c.JSON(http.StatusOK, model.UserResponse{
 			Response: model.Response{
 				StatusCode: -1,
-				StatusMsg:  "you haven't followed this user yet",
+				StatusMsg:  "you must login first!",
 			},
 		})
 		return
