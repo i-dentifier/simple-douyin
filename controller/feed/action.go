@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"simple-douyin/model"
 	feedservice "simple-douyin/service/feed"
-	"time"
 )
 
 type FeedResponse struct {
@@ -16,17 +15,17 @@ type FeedResponse struct {
 
 func Feed(c *gin.Context) {
 
-	last_time := c.Query("last_time")
+	latestTime := c.Query("latest_time")
 
 	var userId uint32
-	var islogin bool
+	var isLogin bool
 	if token := c.Query("token"); token != "" {
 		claims, _ := c.Get("user")
 		userId = claims.(*model.UserClaims).UserId
-		islogin = true
+		isLogin = true
 	}
 
-	Videos, err := feedservice.Feed(last_time, userId, islogin)
+	Videos, err := feedservice.Feed(latestTime, userId, isLogin)
 
 	if err != nil {
 		c.JSON(http.StatusOK, model.Response{
@@ -39,6 +38,6 @@ func Feed(c *gin.Context) {
 	c.JSON(http.StatusOK, FeedResponse{
 		Response:  model.Response{StatusCode: 0, StatusMsg: "success"},
 		VideoList: Videos,
-		NextTime:  time.Now().Unix(),
+		NextTime:  Videos[len(Videos)-1].CreateAt.Unix(),
 	})
 }

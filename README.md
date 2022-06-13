@@ -58,6 +58,22 @@ mysql -h 180.76.52.150 -u douyin -p
 用户投稿和获取投稿列表都需要token登录的鉴权，目前还未对接点赞和评论的操作
 注：查看视频会闪退
 
+### 3.Feed
+* 拉取视频 `/douyin/feed/action/`
+* 视频列表 `/douyin/feed/list/`
+
+### 4.Favorite
+* 点赞操作 `/douyin/favorite/action/`
+* 点赞列表 `/douyin/favorite/list/`
+
+### 5.Comment
+* 评论操作 `/douyin/comment/action/`
+* 评论列表 `/douyin/comment/list/`
+
+### 6.Relation
+* 关注操作 `/douyin/relation/action/`
+* 关注列表 `/douyin/relation/list/`
+
 
 其余接口建议进行分类，例如user相关的接口在controller, service, dao层分别建立user目录，其中所有文件都统一package为usercontroller, userservice, userdao
 

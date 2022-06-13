@@ -25,12 +25,12 @@ func NewFeedDaoInstance() *FeedDao {
 func (f *FeedDao) Fetch(checkTime time.Time) ([]*model.Video, error) {
 	var flow []*model.Video
 	res := config.DB.Preload("Author").Where("create_at < ?", checkTime).
-		Order("create_at desc").Limit(30).Find(&flow)
+		Order("create_at desc").Limit(3).Find(&flow)
 	return flow, res.Error
 }
 
 func (f *FeedDao) AddFavorite(feedList []*model.Video, userId uint32) []*model.Video {
-	// 更新videos中的favorite字段
+	// 更新videos中的favorite/comment字段
 	for _, video := range feedList {
 		var favoriteCount, followCount int64
 		// 登录用户已点赞该视频
