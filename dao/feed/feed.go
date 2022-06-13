@@ -25,7 +25,7 @@ func NewFeedDaoInstance() *FeedDao {
 func (f *FeedDao) Fetch(checkTime time.Time) ([]*model.Video, error) {
 	var flow []*model.Video
 	res := config.DB.Preload("Author").Where("create_at < ?", checkTime).
-		Order("create_at desc").Limit(3).Find(&flow)
+		Order("create_at desc").Limit(30).Find(&flow)
 	return flow, res.Error
 }
 
