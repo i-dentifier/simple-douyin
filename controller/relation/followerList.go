@@ -7,7 +7,7 @@ import (
 	relationservice "simple-douyin/service/relation"
 )
 
-func FollowList(c *gin.Context) {
+func FollowerList(c *gin.Context) {
 
 	// token经middleware验证合法后将存入context
 	claims, exists := c.Get("user")
@@ -16,29 +16,29 @@ func FollowList(c *gin.Context) {
 		c.JSON(http.StatusOK, model.UserResponse{
 			Response: model.Response{
 				StatusCode: -1,
-				StatusMsg:  "login required to get follow list",
+				StatusMsg:  "login required to get follower list",
 			},
 		})
 		return
 	}
 	userClaims := claims.(*model.UserClaims)
 	userId := userClaims.UserId
-	followList, err := relationservice.FollowList(userId)
+	followerList, err := relationservice.FollowerList(userId)
 	if err != nil {
 		c.JSON(http.StatusOK, model.UserResponse{
 			Response: model.Response{
 				StatusCode: -1,
-				StatusMsg:  "get follow list error",
+				StatusMsg:  "get follower list error",
 			},
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, model.FollowListResponse{
+	c.JSON(http.StatusOK, model.FollowerListResponse{
 		Response: model.Response{
 			StatusCode: 0,
 			StatusMsg:  "success",
 		},
-		FollowList: followList,
+		FollowerList: followerList,
 	})
 }

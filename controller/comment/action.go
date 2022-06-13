@@ -10,7 +10,11 @@ import (
 
 func Action(c *gin.Context) {
 
+<<<<<<< HEAD
 	// 官方接口使用的是int64 待讨论
+=======
+	// 官方接口出使用的是int64 待讨论
+>>>>>>> 1cf12981e454aa52144ad1851ee392b013bed92c
 	userId, err := strconv.ParseInt(c.Query("user_id"), 10, 32)
 	videoId, err := strconv.ParseInt(c.Query("video_id"), 10, 32)
 	actionType := c.Query("action_type")
