@@ -22,8 +22,8 @@ func NewFavListDaoInstance() *FavListDao {
 }
 
 func (f *FavListDao) GetVideoList(userId uint32) ([]*model.Video, error) {
-	var favorites []model.Favorite
-	if res := config.DB.Where("user_id = ?", userId).Select("video_id").Find(&favorites); res.Error != nil {
+	var favorites []*model.Favorite
+	if res := config.DB.Where("user_id = ?", userId).Find(&favorites); res.Error != nil {
 		return nil, res.Error
 	}
 

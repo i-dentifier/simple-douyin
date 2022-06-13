@@ -5,7 +5,7 @@ import "time"
 type Video struct {
 	Id            uint32    `json:"id" gorm:"primaryKey"`
 	Author        *User     `json:"author" gorm:"foreignKey:UserId;references:Id"`
-	UserId        uint32    `json:"-"`
+	UserId        uint32    `json:"-" gorm:"index"`
 	PlayUrl       string    `json:"play_url"`
 	CoverUrl      string    `json:"cover_url"`
 	FavoriteCount uint32    `json:"favorite_count"`
